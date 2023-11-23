@@ -1,7 +1,7 @@
 import User from "../models/user.models.js";
 import bcryptjs from "bcryptjs";
 
-export const signup = async (req, res) => {
+export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
   //for encrypting the password
   const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -13,6 +13,7 @@ export const signup = async (req, res) => {
       message: "User created successfully!",
     });
   } catch (error) {
-    res.status(500).json(error.message);
+    //this "next" call directly passes the error received to the middleware code handler in index.js
+    next(error);
   }
 };
